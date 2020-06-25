@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MusicMarketETicaret.Models;
 
-namespace MusicMarketETicaret.Areas.Customer.Controllers
+namespace MusicMarketETicaret.Controllers
 {
-    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

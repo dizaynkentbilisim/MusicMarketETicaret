@@ -62,7 +62,7 @@ namespace MusicMarketETicaret
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=customer}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
