@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MusicMarketETicaret.Models.DbModels;
 
 namespace MusicMarketETicaret.Data
 {
@@ -9,5 +10,9 @@ namespace MusicMarketETicaret.Data
             : base(options)
         {
         }
+
+        //entityleri ekliyoruz.
+        public DbSet<Category> Category { get; set; }
+
     }
 }
