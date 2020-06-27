@@ -13,4 +13,8 @@
     <ProjectReference Include="..\MusicMarketETicaret.Models\MusicMarketETicaret.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>
