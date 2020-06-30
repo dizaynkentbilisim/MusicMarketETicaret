@@ -12,6 +12,8 @@ using MusicMarketETicaret.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MusicMarketETicaret.DataAccess.IMainRepository;
+using MusicMarketETicaret.DataAccess.MainRepository;
 
 namespace MusicMarketETicaret
 {
@@ -27,13 +29,16 @@ namespace MusicMarketETicaret
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+           //services.AddMvc();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("SqlConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();//Kullanmamýþsýn:=
+            services.AddRazorPages();
          
         }
 

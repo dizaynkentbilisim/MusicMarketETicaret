@@ -1,21 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MusicMarketETicaret.DataAccess.IMainRepository;
 using MusicMarketETicaret.DataAccess.MainRepository;
 using MusicMarketETicaret.Models.DbModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace MusicMarketETicaret.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    
+
     public class CategoryController : Controller
     {
         #region Variables
-        private readonly UnitOfWork _uow;
+        private readonly IUnitOfWork _uow;
         #endregion
 
         #region CTOR
-        public CategoryController(UnitOfWork uow)
+        public CategoryController(IUnitOfWork uow)
         {
             _uow = uow;
         }
@@ -37,5 +39,27 @@ namespace MusicMarketETicaret.Areas.Admin.Controllers
 
         }
         #endregion
+
+        /// <summary>
+        /// Create or Update Get Method
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Category</returns>
+        [HttpGet]
+        public IActionResult Upsert(int? id)
+        {
+            Category cat = new Category();
+            if (id == null)
+            {
+                //This For Create
+                return View(cat);
+            }
+            cat = _uow.category.Get((int)id);
+            if (cat != null)
+            {
+                return View(cat);
+            }
+            return NotFound();
+        }
     }
 }
