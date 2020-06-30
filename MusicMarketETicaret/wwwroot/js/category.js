@@ -14,13 +14,13 @@ function loadDataTable() {
             { "data": "categoryName", "width": "60%" },
             {
                 "data": "Id",
-                "render": function (data) {
+                "render": function (data, type, row) {                 
                     return `
                             <div class="text-center">
-                                <a href="/Admin/Category/Upsert/${data}" class="btn btn-success text-white" style="cursor:pointer">
+                                <a href="/Admin/Category/Upsert/${row.id}" class="btn btn-success text-white" style="cursor:pointer">
                                     <i class="fas fa-edit"></i> 
                                 </a>
-                                <a onclick=Delete("/Admin/Category/Delete/${data}") class="btn btn-danger text-white" style="cursor:pointer">
+                                <a onclick=Delete("/Admin/Category/Delete/${row.id}") class="btn btn-danger text-white" style="cursor:pointer">
                                     <i class="fas fa-trash-alt"></i> 
                                 </a>
                             </div>
