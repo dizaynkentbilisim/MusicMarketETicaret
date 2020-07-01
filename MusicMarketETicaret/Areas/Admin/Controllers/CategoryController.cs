@@ -38,6 +38,21 @@ namespace MusicMarketETicaret.Areas.Admin.Controllers
             return Json(new { data = allObj });
 
         }
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            var deleteData = _uow.category.Get(id);
+            if (deleteData == null)
+            {
+                return Json(new { success = false, message = "Data Not Fond!" });
+            }
+            else 
+            {
+                _uow.category.Remove(deleteData);
+                _uow.save();
+                return Json(new { success = true, message = "Data Delete Okey !" });
+            }
+        }
         #endregion
 
         /// <summary>
@@ -61,5 +76,29 @@ namespace MusicMarketETicaret.Areas.Admin.Controllers
             }
             return NotFound();
         }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult Upsert(Category category)
+        {
+
+            if (ModelState.IsValid)
+            {
+                if (category.Id == 0)
+                {
+                    //create
+                    _uow.category.Add(category);
+                }
+                else
+                {
+                    //Update
+                    _uow.category.Update(category);
+                }
+                _uow.save();
+                return RedirectToAction("Index");
+            }
+            return View(category);
+        }
+
     }
 }
