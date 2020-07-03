@@ -1,5 +1,6 @@
 ﻿using MusicMarketETicaret.Data;
 using MusicMarketETicaret.DataAccess.IMainRepository;
+using MusicMarketETicaret.DataAccess.Migrations;
 
 namespace MusicMarketETicaret.DataAccess.MainRepository
 {
@@ -11,6 +12,7 @@ namespace MusicMarketETicaret.DataAccess.MainRepository
         {
             _db = db;
             category = new CategoryRepository(_db);
+            coverType = new CoverTypeRepository(_db);
             sp_call = new SPCallRepository(_db);
 
 
@@ -18,6 +20,7 @@ namespace MusicMarketETicaret.DataAccess.MainRepository
 
 
         public ICategoryRepository category { get; private set; }
+        public ICoverTypeRepository coverType { get; private set; }
 
         public ISPCallRepository sp_call { get; private set; }
 
