@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using MusicMarketETicaret.DataAccess.IMainRepository;
 using MusicMarketETicaret.Models.DbModels;
+using MusicMarketETicaret.Utility;
 
 namespace MusicMarketETicaret.Areas.Admin.Controllers
 {
-  
+
     [Area("Admin")]
     public class CoverTypeController : Controller
     {
@@ -34,24 +37,41 @@ namespace MusicMarketETicaret.Areas.Admin.Controllers
         #region API CALLS
         public IActionResult GetAll()
         {
-            var allObj = _uow.coverType.GetAll();
-            return Json(new { data = allObj });
+            // var allObj = _uow.coverType.GetAll();
+            var allCoverTypes = _uow.sp_call.List<CoverType>(PorojectConstant.Proc_CoverType_GetAll, null);
+            return Json(new { data = allCoverTypes });
 
         }
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            var deleteData = _uow.coverType.Get(id);
+            // var deleteData = _uow.coverType.Get(id);
+            //if (deleteData == null)
+            //{
+            //  return Json(new { success = false, message = "Data Not Fond!" });
+            //}
+            //else
+            //{
+            //  _uow.coverType.Remove(deleteData);
+            //_uow.save();
+            //return Json(new { success = true, message = "Data Delete Okey !" });
+            //}
+
+            var parameter = new DynamicParameters();
+            parameter.Add("@Id", id);
+
+            var deleteData = _uow.sp_call.OneRecord<CoverType>(PorojectConstant.Proc_CoverType_Get, parameter);
             if (deleteData == null)
             {
                 return Json(new { success = false, message = "Data Not Fond!" });
             }
             else
             {
-                _uow.coverType.Remove(deleteData);
+                _uow.sp_call.Execute(PorojectConstant.Proc_CoverType_Delete, parameter);
                 _uow.save();
                 return Json(new { success = true, message = "Data Delete Okey !" });
             }
+
         }
         #endregion
 
@@ -63,16 +83,20 @@ namespace MusicMarketETicaret.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Upsert(int? id)
         {
-            CoverType cat = new CoverType();
+            CoverType coverType = new CoverType();
             if (id == null)
             {
                 //This For Create
-                return View(cat);
+                return View(coverType);
             }
-            cat = _uow.coverType.Get((int)id);
-            if (cat != null)
+            var parameter = new DynamicParameters();
+            parameter.Add("@Id", id);
+            coverType = _uow.sp_call.OneRecord<CoverType>(PorojectConstant.Proc_CoverType_Get, parameter);
+
+            //coverType = _uow.coverType.Get((int)id);
+            if (coverType != null)
             {
-                return View(cat);
+                return View(coverType);
             }
             return NotFound();
         }
@@ -84,15 +108,22 @@ namespace MusicMarketETicaret.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var parameter = new DynamicParameters();
+                parameter.Add("Name", coverType.Name);
+
                 if (coverType.Id == 0)
                 {
                     //create
-                    _uow.coverType.Add(coverType);
+                    // _uow.coverType.Add(coverType);
+
+                    _uow.sp_call.Execute(PorojectConstant.Proc_CoverType_Create, parameter);
                 }
                 else
                 {
                     //Update
-                    _uow.coverType.Update(coverType);
+                    // _uow.coverType.Update(coverType);
+                    parameter.Add("@Id", coverType.Id);
+                    _uow.sp_call.Execute(PorojectConstant.Proc_CoverType_Update, parameter);
                 }
                 _uow.save();
                 return RedirectToAction("Index");
