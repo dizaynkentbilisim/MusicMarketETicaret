@@ -8,6 +8,7 @@ namespace MusicMarketETicaret.DataAccess.IMainRepository
     {
         ICategoryRepository category { get; }
         ICoverTypeRepository coverType { get; }
+        IProductRepository Product { get; }
         ISPCallRepository sp_call { get; }
         void save();
     }

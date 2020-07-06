@@ -13,14 +13,15 @@ namespace MusicMarketETicaret.DataAccess.MainRepository
             _db = db;
             category = new CategoryRepository(_db);
             coverType = new CoverTypeRepository(_db);
+            Product = new ProductRepository(_db);
             sp_call = new SPCallRepository(_db);
-
-
         }
 
 
         public ICategoryRepository category { get; private set; }
         public ICoverTypeRepository coverType { get; private set; }
+        public IProductRepository Product { get; private set; }
+
 
         public ISPCallRepository sp_call { get; private set; }
 
